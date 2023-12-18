@@ -1,6 +1,6 @@
 const Book = require("../models/BookModel");
 const { body,validationResult } = require("express-validator");
-const { sanitizeBody } = require("express-validator");
+const { check } = require("express-validator");
 const apiResponse = require("../helpers/apiResponse");
 const auth = require("../middlewares/jwt");
 var mongoose = require("mongoose");
@@ -21,7 +21,6 @@ function BookData(data) {
  * @returns {Object}
  */
 exports.bookList = [
-	auth,
 	function (req, res) {
 		try {
 			Book.find({user: req.user._id},"_id title description isbn createdAt").then((books)=>{
@@ -46,7 +45,6 @@ exports.bookList = [
  * @returns {Object}
  */
 exports.bookDetail = [
-	auth,
 	function (req, res) {
 		if(!mongoose.Types.ObjectId.isValid(req.params.id)){
 			return apiResponse.successResponseWithData(res, "Operation success", {});
@@ -77,7 +75,6 @@ exports.bookDetail = [
  * @returns {Object}
  */
 exports.bookStore = [
-	auth,
 	body("title", "Title must not be empty.").isLength({ min: 1 }).trim(),
 	body("description", "Description must not be empty.").isLength({ min: 1 }).trim(),
 	body("isbn", "ISBN must not be empty").isLength({ min: 1 }).trim().custom((value,{req}) => {
@@ -87,7 +84,7 @@ exports.bookStore = [
 			}
 		});
 	}),
-	sanitizeBody("*").escape(),
+	check("*").escape(),
 	(req, res) => {
 		try {
 			const errors = validationResult(req);
@@ -126,7 +123,6 @@ exports.bookStore = [
  * @returns {Object}
  */
 exports.bookUpdate = [
-	auth,
 	body("title", "Title must not be empty.").isLength({ min: 1 }).trim(),
 	body("description", "Description must not be empty.").isLength({ min: 1 }).trim(),
 	body("isbn", "ISBN must not be empty").isLength({ min: 1 }).trim().custom((value,{req}) => {
@@ -136,7 +132,7 @@ exports.bookUpdate = [
 			}
 		});
 	}),
-	sanitizeBody("*").escape(),
+	check("*").escape(),
 	(req, res) => {
 		try {
 			const errors = validationResult(req);
@@ -191,7 +187,6 @@ exports.bookUpdate = [
  * @returns {Object}
  */
 exports.bookDelete = [
-	auth,
 	function (req, res) {
 		if(!mongoose.Types.ObjectId.isValid(req.params.id)){
 			return apiResponse.validationErrorWithData(res, "Invalid Error.", "Invalid ID");
