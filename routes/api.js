@@ -8,5 +8,6 @@ var app = express();
 app.use("/auth/", authRouter);
 app.use("/book/", bookRouter);
 app.use("/companies/",CompanyRouter);
+app.use("/marketResearch/",MarketResearchRouter);
 
 module.exports = app;

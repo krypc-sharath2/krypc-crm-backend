@@ -1,4 +1,4 @@
-const Companies = require("../models/CompaniesModel");
+const MarketResearch = require("../models/MarketResearchModel");
 const { body,validationResult } = require("express-validator");
 const { check } = require("express-validator");
 const apiResponse = require("../helpers/apiResponse");
@@ -6,30 +6,43 @@ const auth = require("../middlewares/jwt");
 var mongoose = require("mongoose");
 mongoose.set("useFindAndModify", false);
 
-// Company Schema
-function CompaniesData(data) {
-    this._id = data._id;
-    this.account_name= data.account_name;
-    this.sector= data.sector;
-    this.industry_vertical= data.industry_vertical;
-    this.sales_unit= data.sales_unit;
-    this.area= data.area;
-    this.industry= data.industry;
+// MarketResearch Schema
+function MarketResearchData(data) {
+    this._id = data._id
     this.createdAt = data.createdAt;
+    this.company = data.company,
+	this.mbse= data.mbse,
+    this.gdpr= data.gdpr,
+    this.scm_track= data.scm_track,
+    this.scm_prov= data.scm_prov,
+    this.scm_sust= data.scm_sust,
+    this.asset_track= data.asset_track,
+    this.dpl= data.dpl,
+    this.claims= data.claims,
+    this.scm_dssa= data.scm_dssa,
+    this.retail_lending= data.retail_lending,
+    this.tokenization= data.tokenization,
+    this.data_share= data.data_share,
+    this.emp_health= data.emp_health,
+    this.trade_assets= data.trade_assets,
+    this.asset_track= data.asset_track,
+    this.clinical_trails= data.clinical_trails,
+    this.others= data.others, 
+    this.total = data.total
 }
 
 /**
- * Book List.
+ * Market Research List.
  * 
  * @returns {Object}
  */
-exports.companiesList = [
+exports.MarketResearchList = [
 	function (req, res) {
         console.log(req.body)
 		try {
-			Companies.find().then((companies)=>{
-				if(companies.length > 0){
-					return apiResponse.successResponseWithData(res, "Operation success", companies);
+			MarketResearch.find().then((marketresearch)=>{
+				if(marketresearch.length > 0){
+					return apiResponse.successResponseWithData(res, "Operation success", marketresearch);
 				}else{
 					return apiResponse.successResponseWithData(res, "Operation success", []);
 				}
@@ -42,22 +55,22 @@ exports.companiesList = [
 ];
 
 /**
- * Company Detail.
+ * MarkertResearch Detail.
  * 
  * @param {string}      id
  * 
  * @returns {Object}
  */
-exports.getCompanyById = [
+exports.getMarketResearchById = [
 	function (req, res) {
 		if(!mongoose.Types.ObjectId.isValid(req.params.id)){
 			return apiResponse.successResponseWithData(res, "Operation success", {});
 		}
 		try {
-			Companies.findOne({_id: req.params.id}).then((company)=>{                
-				if(company !== null){
-					let companyData = new CompaniesData(company);
-					return apiResponse.successResponseWithData(res, "Operation success", companyData);
+			MarketResearch.findOne({company: req.params.id}).then((mrd)=>{                
+				if(mrd !== null){
+					let mrdData = new MarketResearchData(mrd);
+					return apiResponse.successResponseWithData(res, "Operation success", mrdData);
 				}else{
 					return apiResponse.successResponseWithData(res, "Operation success", {});
 				}
@@ -70,43 +83,27 @@ exports.getCompanyById = [
 ];
 
 /**
- * Companies store.
+ * MarketResearch store.
  * 
- * @param {string}      account_name
- * @param {string}      sector
- * @param {string}      industry
- * @param {string}      industry_vertical 
- * @param {string}      sales_unit
- * @param {string}      area
- * @param {string}      subsidiary
+ * @param {string}      id
+ * @param {boolean}      sector
+ * @param {boolean}      industry
+ * @param {boolean}      industry_vertical 
+ * @param {boolean}      sales_unit
+ * @param {boolean}      area
+ * @param {boolean}      subsidiary
  * 
  * @returns {Object}
  */
-exports.addCompany = [
-	body("industry", "Industry must not be empty").isLength({ min: 1 }).trim(),
-	body("sector", "Company sector must not be empty.").isLength({ min: 1 }).trim(),
-    body("industry_vertical", "Industry Vertical must not be empty.").isLength({ min: 1 }).trim(),
-    body("sales_unit", "Sales unit must not be empty.").isLength({ min: 1 }).trim(),
-    body("area", "Area must not be empty.").isLength({ min: 1 }).trim(),
-	body("account_name", "Company Name must not be empty.").isLength({ min: 1 }).trim().custom((value,{req}) => {
-		return Companies.findOne({account_name : value}).then(company => {
-			if (company) {
-				return Promise.reject("Company already exist with this name.");
-			}
-		});
-	}),
-	check("*").escape(),
+exports.addMarketResearch = [
 	(req, res) => {
 		try {
 			const errors = validationResult(req);
-			var company = new Companies(
-				{ account_name: req.body.account_name,
-					sector: req.body.sector,
-					industry_vertical: req.body.industry_vertical,
-					sales_unit: req.body.sales_unit,
-                    area: req.body.area,
-                    industry: req.body.industry,
-                    subsidiary: req.body.subsidiary
+            fetched_company = Company.findById(id= req.id)
+			var mrd = new MarketResearch(
+				{   
+                    company: fetched_company,
+                    others: true
 				});
 
 			if (!errors.isEmpty()) {
@@ -114,10 +111,10 @@ exports.addCompany = [
 			}
 			else {
 				//Save company.
-				company.save(function (err) {
+				mrd.save(function (err) {
 					if (err) { return apiResponse.ErrorResponse(res, err); }
-					let companyData = new CompaniesData(company);
-					return apiResponse.successResponseWithData(res,"Company add Success.", companyData);
+					let mrdData = new MarketResearchData(mrd);
+					return apiResponse.successResponseWithData(res,"Market Research add Success.", mrdData);
 				});
 			}
 		} catch (err) {
@@ -128,7 +125,7 @@ exports.addCompany = [
 ];
 
 /**
- * Company update.
+ * Market Research update.
  * 
  * @param {string}      account_name
  * @param {string}      sector
@@ -140,7 +137,7 @@ exports.addCompany = [
  * 
  * @returns {Object}
  */
-exports.companyUpdate = [
+exports.MarketResearchUpdate = [
 	body("industry", "Industry must not be empty").isLength({ min: 1 }).trim(),
 	body("sector", "Company sector must not be empty.").isLength({ min: 1 }).trim(),
     body("industry_vertical", "Industry Vertical must not be empty.").isLength({ min: 1 }).trim(),
