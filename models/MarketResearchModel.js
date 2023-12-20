@@ -2,7 +2,7 @@ var mongoose = require("mongoose");
 
 var Schema = mongoose.Schema;
 
-var CompanySchema = new Schema({
+var MarketSchema = new Schema({
 	account_name: {type: String, required: true},
 	sector: {type: String, required: true},
 	industry: {type: String, required: true},
@@ -13,4 +13,4 @@ var CompanySchema = new Schema({
 	id: {type:String,required:true},
 }, {timestamps: true});
 
-module.exports = mongoose.model("Companies", CompanySchema);
+module.exports = mongoose.model("Markets", MarketSchema);
