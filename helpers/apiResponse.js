@@ -12,7 +12,7 @@ exports.successResponseWithData = function (res, msg, data) {
 		message: msg,
 		data: data
 	};
-	return res.status(200).json(resData);
+	return res.status(200).json(data);
 };
 
 exports.ErrorResponse = function (res, msg) {

@@ -1,5 +1,4 @@
 var mongoose = require("mongoose");
-const CompaniesModel = require("./CompaniesModel");
 
 var Schema = mongoose.Schema;
 var MarketResearchSchema = new Schema({
@@ -29,3 +28,4 @@ var MarketResearchSchema = new Schema({
 }, {timestamps: true});
 
 module.exports = mongoose.model("MarketResearch", MarketResearchSchema);
+
