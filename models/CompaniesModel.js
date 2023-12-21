@@ -10,7 +10,7 @@ var CompanySchema = new Schema({
     sales_unit: {type: String, required: true},
     area: {type: String, required: true},
     subsidiary: {type: String, required: true},
-
+	id: {type:String,required:true},
 }, {timestamps: true});
 
 module.exports = mongoose.model("Companies", CompanySchema);

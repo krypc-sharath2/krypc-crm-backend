@@ -3,7 +3,7 @@ const CompaniesModel = require("./CompaniesModel");
 
 var Schema = mongoose.Schema;
 var MarketResearchSchema = new Schema({
-    company: {type: CompaniesModel, required:true},
+    company: {type: mongoose.Schema.Types.ObjectId, ref: 'Company', required:true},
 	mbse: {type: Boolean, default:false},
     gdpr: {type: Boolean, default:false},
     scm_track: {type: Boolean, default:false},
