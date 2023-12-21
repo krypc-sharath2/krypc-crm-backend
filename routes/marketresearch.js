@@ -3,10 +3,10 @@ const MarketResearchController = require("../controllers/marketResearchControlle
 
 var router = express.Router();
 
-// router.get("/", MarketResearchController.MarketResearchList);
-// router.get("/:id", MarketResearchController.getMarketResearchById);
-// router.post("/", MarketResearchController.addMarketResearch);
-// router.put("/:id", MarketResearchController.MarketResearchUpdate);
-// router.delete("/:id", MarketResearchController.MarketResearchDelete);
+router.get("/", MarketResearchController.MarketResearchList);
+router.get("/:id", MarketResearchController.getMarketResearchById);
+router.post("/", MarketResearchController.addMarketResearch);
+router.put("/:id", MarketResearchController.MarketResearchUpdate);
+router.delete("/:id", MarketResearchController.MarketResearchUpdate);
 
 module.exports = router;

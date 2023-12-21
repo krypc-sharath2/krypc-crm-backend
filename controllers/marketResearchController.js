@@ -4,6 +4,8 @@ const { check } = require("express-validator");
 const apiResponse = require("../helpers/apiResponse");
 const auth = require("../middlewares/jwt");
 var mongoose = require("mongoose");
+const Company = require("../models/CompaniesModel");
+
 mongoose.set("useFindAndModify", false);
 
 // MarketResearch Schema
@@ -98,26 +100,29 @@ exports.getMarketResearchById = [
 exports.addMarketResearch = [
 	(req, res) => {
 		try {
-			const errors = validationResult(req);
-            fetched_company = Company.findById(id= req.id)
-			var mrd = new MarketResearch(
-				{   
-                    company: fetched_company,
-                    others: true
-				});
+			const errors = validationResult(req.body);
+            Company.findOne({id:req.body.id}).then((company) =>{
+				var mrd = new MarketResearch(
+					{
+						company: company._id,
+						others: true
+					});
 
-			if (!errors.isEmpty()) {
-				return apiResponse.validationErrorWithData(res, "Validation Error.", errors.array());
-			}
-			else {
-				//Save company.
-				mrd.save(function (err) {
-					if (err) { return apiResponse.ErrorResponse(res, err); }
-					let mrdData = new MarketResearchData(mrd);
-					return apiResponse.successResponseWithData(res,"Market Research add Success.", mrdData);
-				});
-			}
+				if (!errors.isEmpty()) {
+					return apiResponse.validationErrorWithData(res, "Validation Error.", errors.array());
+				}
+				else {
+					//Save company.
+					mrd.save(function (err) {
+						if (err) { return apiResponse.ErrorResponse(res, err); }
+						let mrdData = new MarketResearchData(mrd);
+						return apiResponse.successResponseWithData(res,"Market Research add Success.", mrdData);
+					});
+				}
+			});
+			//console.log(fetched_company);
 		} catch (err) {
+			console.log(err)
 			//throw error in json response with status 500. 
 			return apiResponse.ErrorResponse(res, err);
 		}

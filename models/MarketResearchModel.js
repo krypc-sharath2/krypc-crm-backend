@@ -3,6 +3,7 @@ var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 var MarketResearchSchema = new Schema({
     company: {type: mongoose.Schema.Types.ObjectId, ref: 'Company', required:true},
+    id: {type: String, required:true},
 	mbse: {type: Boolean, default:false},
     gdpr: {type: Boolean, default:false},
     scm_track: {type: Boolean, default:false},
@@ -17,7 +18,6 @@ var MarketResearchSchema = new Schema({
     data_share: {type: Boolean, default:false},
     emp_health: {type: Boolean, default:false},
     trade_assets: {type: Boolean, default:false},
-    asset_track: {type: Boolean, default:false},
     clinical_trails: {type: Boolean, default:false},
     others: {type: Boolean, default:true}, 
     total: {type: Number, default: function(){

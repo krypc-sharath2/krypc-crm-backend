@@ -2,7 +2,7 @@ var express = require("express");
 var authRouter = require("./auth");
 var bookRouter = require("./book");
 var CompanyRouter = require("./companies")
-var MarkertResearchRouter = require("./marketresearch")
+var MarketResearchRouter = require("./marketresearch")
 var marketRouter = require("./markets")
 var pillarRouter = require("./pillars")
 
@@ -13,7 +13,7 @@ app.use("/book/", bookRouter);
 app.use("/companies/",CompanyRouter);
 // app.use("/marketResearch/",MarketResearchRouter);
 
-app.use("/marketResearch/",marketRouter);
+app.use("/marketResearch/",MarketResearchRouter);
 app.use("/pillars/",pillarRouter);
 
 module.exports = app;
