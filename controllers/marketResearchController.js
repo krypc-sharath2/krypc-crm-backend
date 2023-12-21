@@ -105,6 +105,7 @@ exports.addMarketResearch = [
 				var mrd = new MarketResearch(
 					{
 						company: company._id,
+						id: company.id,
 						others: true
 					});
 
