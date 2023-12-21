@@ -106,7 +106,8 @@ exports.addCompany = [
 					sales_unit: req.body.sales_unit,
                     area: req.body.area,
                     industry: req.body.industry,
-                    subsidiary: req.body.subsidiary
+                    subsidiary: req.body.subsidiary,
+					id:req.body.account_name,
 				});
 
 			if (!errors.isEmpty()) {
