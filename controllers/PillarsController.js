@@ -80,30 +80,38 @@ exports.getPillarById = [
  * @returns {Object}
  */
 exports.addPillar = [
-	body("industry", "Industry must not be empty").isLength({ min: 1 }).trim(),
-	body("sector", "Company sector must not be empty.").isLength({ min: 1 }).trim(),
-    body("industry_vertical", "Industry Vertical must not be empty.").isLength({ min: 1 }).trim(),
-    body("sales_unit", "Sales unit must not be empty.").isLength({ min: 1 }).trim(),
-    body("area", "Area must not be empty.").isLength({ min: 1 }).trim(),
-	body("account_name", "Company Name must not be empty.").isLength({ min: 1 }).trim().custom((value,{req}) => {
+	/*body("account_name", "Company Name must not be empty.").isLength({ min: 1 }).trim().custom((value,{req}) => {
 		return PillarSchema.findOne({account_name : value}).then(company => {
 			if (company) {
 				return Promise.reject("Company already exist with this name.");
 			}
 		});
 	}),
-	check("*").escape(),
+	check("*").escape(),*/
 	(req, res) => {
 		try {
 			const errors = validationResult(req);
-			var company = new Companies(
-				{ account_name: req.body.account_name,
-					sector: req.body.sector,
-					industry_vertical: req.body.industry_vertical,
-					sales_unit: req.body.sales_unit,
-                    area: req.body.area,
-                    industry: req.body.industry,
-                    subsidiary: req.body.subsidiary
+			req.body.id = req.body.account_name;
+			//console.log('Request body:', JSON.stringify(req.body, null, 2));
+
+			//console.log(JSON.parse(req.body));
+			console.log(req.body);
+
+			var company = new PillarSchema(
+				{
+					account_name: req.body.account_name,
+					"web3-dApps": req.body["web3-dApps"],
+					"web3-SmartContract": req.body["web3-SmartContract"],
+					"web3-NFTs":req.body["web3-NFTs"],
+					hlf: req.body.hlf,
+					sensor: req.body.sensor,
+					vboard: req.body.vboard,
+					vaas: req.body.vaas,
+					carboncore: req.body.carboncore,
+					giftcard: req.body.giftcard,
+					tokenization: req.body.tokenization,
+					web3loyalty: req.body.web3loyalty,
+					id: req.body.id
 				});
 
 			if (!errors.isEmpty()) {
@@ -113,7 +121,7 @@ exports.addPillar = [
 				//Save company.
 				company.save(function (err) {
 					if (err) { return apiResponse.ErrorResponse(res, err); }
-					let companyData = new CompaniesData(company);
+					let companyData = new PillarData(company);
 					return apiResponse.successResponseWithData(res,"Company add Success.", companyData);
 				});
 			}
